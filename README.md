@@ -15,3 +15,6 @@ Then, my microsoft azsure account is successfully created and I have recevied $1
 # Linking my GitHub account to my HAMK email
 1. I created a new repository named "Linux" for the assignment.
 2. Then I linked my HAMK email as a secondary mail for version control. 
+
+# Screenshot 
+![alt text](<Screenshot 2025-01-23 005738.png>)
