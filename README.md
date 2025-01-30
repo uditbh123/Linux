@@ -106,3 +106,8 @@ Check directory permissions:
 # Output
 
         drwxrws--- 2 root projekti 4096 Jan 30 18:37 /opt/projekti
+
+# Screenshot 
+![alt text](<Screenshot 2025-01-30 203724.png>)
+![alt text](<Screenshot 2025-01-30 204041.png>)
+![alt text](<Screenshot 2025-01-30 212143.png>)
