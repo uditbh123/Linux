@@ -261,4 +261,16 @@ sudo apt-mark unhold gimp
 -Why would you want to hold a package?
 - Keeping a package from being automatically upgraded is done by holding it. This is helpful if you wish to maintain a particular version of a package that you are aware functions well with your system.
 
+# Screenshot 
 
+## Figure 1: Updating Package List
+![alt text](<Screenshot 2025-02-12 234459.png>)
+
+## Figure 2: Installing the Package 
+![alt text](<Screenshot 2025-02-12 234610.png>)
+
+## Figure 3: Removing the package 
+![alt text](<Screenshot 2025-02-12 234655.png>)
+
+## Figure 4: Simulating Installation Failure 
+![alt text](<Screenshot 2025-02-12 234813.png>)
