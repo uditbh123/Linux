@@ -111,3 +111,154 @@ Check directory permissions:
 ![alt text](<Screenshot 2025-01-30 203724.png>)
 ![alt text](<Screenshot 2025-01-30 204041.png>)
 ![alt text](<Screenshot 2025-01-30 212143.png>)
+
+
+
+# APT Package Management Assignment 
+# Part 1: Understanding APT and System Updates 
+
+1. Check APT Version 
+```
+apt --version
+```
+## Output
+apt 2.7.14 (amd64)
+
+2. Update Package List 
+```
+sudo apt update 
+```
+
+## Why is this step important?
+This command refreshes the local package index with the most recent updates from the repositories. It guarantees that your system is aware of the most recent packages and their versions available.
+
+3. Upgrade Installed Packages
+```
+sudo apt upgrade -y
+```
+
+## Difference between update and upgrade:
+
+- The update refreshes the available packages and their versions, but it neither installs nor upgrades any packages.
+- upgrade updates to the latest versions of the packages you possess.
+
+4. View Pending Updates 
+```
+apt list --upgradable
+```
+- [Listing... Done] This was the output for the code and there were no pending updates. 
+
+# Part 2: Installing & Managing Packages
+
+1. Search for a Package
+```
+apt search image editor
+```
+- So, I have selected the gimp package. 
+
+2. View Package Details 
+```
+apt show gimp 
+```
+## Output 
+- The output lists all dependencies required by the package.
+
+## Dependencies Required 
+```
+libgimp2.0t64 (>= 2.10.36), libgimp2.0t64 (<= 2.10.36-z), gimp-data (>= 2.10.36), gimp-data (<= 2.10.36-z), graphviz, xdg-utils, libaa1 (>= 1.4p5), libbabl-0.1-0 (>= 1:0.1.78), libbz2-1.0, libc6 (>= 2.38), libcairo2 (>= 1.12.2), libfontconfig1 (>= 2.12.6), libfreetype6 (>= 2.2.1), libgcc-s1 (>= 3.3.1), libgdk-pixbuf-2.0-0 (>= 2.30.8), libgegl-0.4-0t64 (>= 1:0.4.38), libgexiv2-2 (>= 0.10.6), 
+```
+
+3. Install the Package
+```
+sudo apt install gimp -y
+```
+- Confirmation 
+The package was installed successfully.
+
+4. Check Installed Package Version 
+```
+apt list --installed | grep gimp 
+```
+## Output
+gimp-data/noble-updates,now 2.10.36-3ubuntu0.24.04.1 all [installed,automatic]
+gimp/noble-updates,now 2.10.36-3ubuntu0.24.04.1 amd64 [installed]
+libgimp2.0t64/noble-updates,now 2.10.36-3ubuntu0.24.04.1 amd64 [installed,automatic]
+
+# Part 3: Removing & Cleaning Packages 
+
+1. Uninstall the Package 
+```
+sudo apt remove gimp -y
+```
+-Is the package fully removed?
+- No, the configuration files are still left behind. 
+
+2. Remove Configuration Files 
+```
+sudo apt purge gimp -y
+```
+-Difference between remove and purge:
+- remove - removes the package but leaves configuration files.
+- purge -  removes the package along with its configuration files.
+
+3. Clear Unnecessary Dependencies
+```
+sudo apt autoremove -y
+```
+-Why is this step important?
+- This command deletes packages that were automatically installed to fulfill dependencies for other packages and are currently unnecessary.
+
+4. Clean Up Download Package Files
+```
+sudo apt clean
+```
+-What does this command do?
+- This command removes the local repository of downloaded package files. It deletes all files located in the /var/cache/apt/archives/directory.
+
+# Part 4: Managing Repositories & Troubleshooting
+
+1. List All APT Repositories 
+```
+cat /etc/apt/sources.list 
+```
+-What do you notice in this file?
+- This document includes the compilation of repositories from which your system retrieves packages.
+
+2. Add a New Repository (Universe)
+```
+sudo add-apt-repository universe
+sudo apt update
+```
+-What types of packages are found in the universe repository?
+- The universe repository holds community-managed free and open-source software. 
+
+3. Simulate an Installation Failure
+```
+sudo apt install fakepackage 
+```
+# Error Message:
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+E: Unable to locate package fakepackage
+
+- How would you troubleshout this issue?
+- Ensure the package name is correct.
+- Check if the repository containing the package is enabled.
+- Update the package list using sudo apt update.
+
+# Bonus Challenges
+
+1. Hold a Package
+```
+sudo apt-mark hold gimp
+```
+
+2. Unhold a Package
+```
+sudo apt-mark unhold gimp
+```
+-Why would you want to hold a package?
+- Keeping a package from being automatically upgraded is done by holding it. This is helpful if you wish to maintain a particular version of a package that you are aware functions well with your system.
+
+
