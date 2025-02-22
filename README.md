@@ -274,3 +274,199 @@ sudo apt-mark unhold gimp
 
 ## Figure 4: Simulating Installation Failure 
 ![alt text](<Screenshot 2025-02-12 234813.png>)
+
+# Assignment 7 - Virtualization
+
+## Part 1: Introduction to Virtualization concepts
+
+
+
+### Virtualization: 
+
+Virtualization involves generating virtual representations of computing resources, including servers, storage, networks, and even complete operating systems. It enables several virtual environments to operate on one physical device, enhancing resource usage and adaptability. 
+
+### Hypervisor: 
+
+A hypervisor, known as a Virtual Machine Monitor (VMM), is a software that establishes and oversees virtual machines (VMs). It enables several VMs to utilize the hardware of one physical server while ensuring their isolation from one another. There exist two categories of hypervisors: 
+
+Bare-Metal - Operates straight on the hardware (e.g., VMware ESXi, Microsoft Hyper-V, KVM). 
+
+Hosted - Operates on an established OS, functioning as an application (e.g., VirtualBox, VMware Workstation). 
+
+### Virtual Machines (VMs): 
+
+A Virtual Machine (VM) is a software-driven simulation of a physical computer. Every VM operates its own operating system (guest OS) and applications, separate from other VMs on the same host. Main Characteristics of VMs: 
+
+1. Contains a complete operating system with virtualized components. 
+
+2. Operates above a hypervisor. 
+
+3. Offers robust separation among various VMs. 
+
+### Containers: 
+
+A container is a portable, lightweight environment that encapsulates an application alongside its dependencies. In contrast to VMs, containers utilize the host operating system's kernel while maintaining application isolation at the process level. Main Characteristics of Containers: 
+
+1. Quicker to initiate and terminate than virtual machines. 
+
+2. Perfect for cloud-native applications and microservices. 
+
+3. Examples: Docker, Kubernetes, LXC. 
+
+### Difference Between Virtual Machines (VMs) and Containers: 
+
+1. Architecture: 
+
+- Virtual machines operate on a hypervisor and consist of a complete operating system, as well as virtualized hardware. 
+
+- Containers utilize the host OS kernel and provide application isolation at the process level. 
+
+2. Resource Usage: 
+
+- VMs demand additional resources since each VM operates with its own operating system. 
+
+- Containers are efficient since they utilize the host OS, which reduces resource consumption. 
+
+3. Levels of Isolation: 
+
+- VMs provide robust isolation since each operates independently. 
+
+- Containers provide process-level isolation but share the host OS kernel, making them less isolated than VMs. 
+
+## Part 2: Working with Multipass 
+
+### Step 1: Install Multipass
+Code
+
+```
+  sudo snap install multipass
+```
+![alt text](<Screenshot (9).png>)
+
+```
+  multipass version
+```
+
+## Step 2: Start Using Multipass
+
+1. Booting an Ubuntu Virtual Machine 
+Code 
+```
+  multipass launch
+```
+2. Listing All Running Instances 
+Code 
+``` 
+multipass list 
+```
+3. View Instance Information
+Code 
+```
+multipass info proper-boatbill
+```
+4. Accessing the Virtual Machine Shell 
+```
+multipass shell proper-boatbill
+```
+## Screenshot of multipass verison and 1 to 4
+![alt text](<Screenshot 2025-02-21 133833.png>)
+
+5. Running Commands on the Virtual Machine 
+Code 
+```
+  multipass exec proper-boatbill -- ls -l /home
+```
+![alt text](<Screenshot 2025-02-21 133846.png>)
+6. Stopping the Instance 
+Code
+```
+  multipass stop proper-boatbill
+```
+7. Delete the Instance 
+```
+multipass delete proper-boatbill 
+```
+![alt text](<Screenshot 2025-02-21 133846-1.png>)
+```
+multipass purge
+```
+![alt text](<Screenshot 2025-02-20 235051-1.png>)
+
+## Step 3: Using Cloud-init For Customization
+- Cloud-init allows users to preconfigure the instance. 
+1. Creating a file name cloud-init.yaml
+```
+nano cloud-init.yaml
+```
+2. Adding the following content
+```
+  #cloud-config
+  users:
+  - name: myuser
+    groups: sudo
+    shell: /bin/bash
+  packages:
+  - htop
+  - curl
+  ```
+3. launching a new instance using this code
+```
+  multipass launch --cloud-init cloud-init.yaml
+```
+![alt text](<Screenshot 2025-02-21 134501.png>)
+
+## Step 4: File Sharing
+- To share files between host and the instance
+1. Create a shared folder in your host machine:
+```
+  mkdir ~/shared-folder
+```
+2. Mount the folder inside Multipass
+```
+  multipass mount ~/shared-folder <instance-name>:/mnt/shared
+```
+3. Inside the instance, we can access /mnt/shared
+```
+  multipass shell <instance-name> ls /mnt/shared
+```
+![alt text](<Screenshot 2025-02-21 135033.png>)
+
+## Part 3: Exploring LXD
+- LXD is a tool that helps in managing containers and virtual machines on your linux platform. Consider it a "manager" for lightweight, isolated environments (containers) and complete virtual machines (VMs) operating on your computer. Main Characteristics of LXD:
+1. Handles both containers and virtual machines.
+2. Provide a unified API for handling instances.
+3. Provides advanced capabilities such as snapshots, live migration, and resource limits.
+4. Developed using LXC (Linux Containers) for enhanced performance and security.
+
+1. Updating your system:
+```
+  sudo apt update
+  sudo apt upgrade -y
+```
+2. Installing LXD:
+```
+  sudo snap install lxd
+```
+3. Verifying the Installation:
+```
+  lxd --version
+```
+Screenshot of 1 to 3
+![alt text](<Screenshot 2025-02-21 135222.png>)
+4. Creating a New Container and List it
+```
+  lxc launch ubuntu:24.04 <container-name>
+  lxc list
+```
+5. Start and Stop the Container
+```
+  lxc stop <container-name>
+  lxc list
+```
+6. Delete the container
+```
+  lxc delete <container-name>
+  lxc list
+```
+Screenshot of 4 to 6
+![alt text](<Screenshot 2025-02-21 135541.png>)
