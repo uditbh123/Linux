@@ -470,3 +470,115 @@ Screenshot of 1 to 3
 ```
 Screenshot of 4 to 6
 ![alt text](<Screenshot 2025-02-21 135541.png>)
+
+## Part 4: How to Stick Apps with Docker 
+1. Install Docker Engine
+```
+  sudo apt update
+  sudo apt install docker-ce docker-ce-cli containerd.io -y
+```
+2. Verifying Installation, Checking Docker Version
+```
+  docker --version
+```
+![alt text](<Screenshot 2025-02-22 165949.png>)
+
+3. Making directory and Creating nano file in docker 
+```
+  mkdir myapp
+  cd myapp
+  echo "hello world" > index.html
+```
+![alt text](<Screenshot 2025-02-21 141202.png>)
+
+4. Building Docker 
+```
+  sudo docker build -t my-nginx
+  sudo docker ps
+```
+![alt text](<Screenshot 2025-02-21 141353.png>)
+![alt text](<Screenshot 2025-02-21 141516.png>)
+
+## Part 5: Snaps for Self-Contained Applications
+1.  Installing Snapd
+```
+  sudo apt install snapd
+```
+2.  Installing Snapcraft
+```
+  sudo snap install snapcraft --classic
+```
+3. Verifying Installation
+```
+  snapcraft --version
+```
+![alt text](<Screenshot 2025-02-21 141706.png>)
+
+## Simple Snapcraft Application
+- Now we will create a simple snap for a basic application. For example, we will use a "Hellp Snap" Python script.
+
+1. Setting Up the Project Directory
+
+```
+mkdir my-snapcraft  
+cd my-snapcraft  
+```
+2. Creating the Application Script 
+```
+mkdir bin  
+nano bin/hello-snap  
+```
+3. Paste the following content into hello-snap
+```
+#!/bin/bash
+echo "Hello, Snap!"
+```
+4. Making the Script Executable
+```
+chmod +x bin/hello-snap  
+```
+![alt text](<Screenshot 2025-02-21 141920.png>)
+
+5. Defining the Snapcraft Configuration
+```
+nano snapcraft.yaml
+```
+6. Write the following code for configuration
+```
+name: my-snapcraft
+base: core22
+version: "1.0"
+summary: "A simple Snapcraft app"
+description: "This is a simple Snap application that prints Hello, Snap!"
+
+grade: stable
+confinement: strict
+
+apps:
+hello:
+command: bin/hello-snap
+
+parts:
+hello:
+plugin: dump
+source: .
+```
+![alt text](<Screenshot 2025-02-21 141834.png>)
+
+7. Building the snap package
+```
+snapcraft
+```
+8. Installing and running my snapcraft
+```
+sudo snap install --devmode my-snap-app_0.1_amd64.snap
+```
+9. Now, running my snap:
+```
+snap run my-snap-app.myscript
+```
+Now, we can see the output:
+```
+Hello from myscript.py!
+```
+![alt text](<Screenshot 2025-02-23 194954.png>)
