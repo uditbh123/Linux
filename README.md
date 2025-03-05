@@ -582,3 +582,76 @@ Now, we can see the output:
 Hello from myscript.py!
 ```
 ![alt text](<Screenshot 2025-02-23 194954.png>)
+
+# Firewall Configuration
+1. Introduction 
+This report details the firewall setup for protecting a server by permitting essential services, preventing unauthorized access, and reducing typical network threats. The firewall regulations are intended to: 
+- Allow essential services (OpenSSH, HTTP, and HTTPS)
+- Log blocked and allowed connections for monitoring
+- Mitigate SYN Flood and other common network attacks
+
+2. Firewall Rules and Explanation
+2.1 Allow OpenSSH (Port 22)
+```
+sudo iptables -A INPUT -p tcp --dport 22 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A OUTPUT -p tcp --sport 22 -m conntrack --ctstate ESTABLISHED -j ACCEPT
+```
+- Purpose: Allows SSH connections for remote administration
+- Why? SSH is required for secure remote access. The rule ensure only new and established connections are allowed.
+
+2.2 Allow HTTP and HTTPS (Ports 80 & 443)
+```
+sudo iptables -A INPUT -p tcp --dport 80 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport 443 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+sudo iptables -A OUTPUT -p tcp --sport 80 -m conntrack --ctstate ESTABLISHED -j ACCEPT
+sudo iptables -A OUTPUT -p tcp --sport 443 -m conntrack --ctstate ESTABLISHED -j ACCEPT
+```
+- Purpose: Allows web traffic over HTTP and HTTPS
+- Why? Necessary for hosting web services while ensuring communication over HTTPS
+
+2.3 Log Blocked connections
+```
+sudo iptables -A INPUT -j LOG --log-prefix "Blocked Connection: "
+sudo iptables -A INPUT -j DROP
+```
+- Purpose: Logs and drops all unauthorized access attempts
+- Why? Helps monitor and analyze potential attack attempts
+
+2.4 SYN Flood Protection
+```
+sudo iptables -A INPUT -p tcp --syn -m limit --limit 1/s --limit-burst 3 -j ACCEPT
+```
+- Purpose: Prevents SYN flood attacks by limiting the rate of new TCP connections.
+- Why? Prevents attackers from overwhelming the server with excessive connection requests
+
+2.5 Brute Force Proctection for SSH
+```
+sudo iptables -A INPUT -p tcp --dport 22 -m recent --set
+sudo iptables -A INPUT -p tcp --dport 22 -m recent --update --seconds 60 --hitcount 3 -j REJECT --reject-with tcp-reset
+```
+- Reasoning: Prevent brute force SSH attacks by limiting the number of login attempts.
+
+2.6 Prevent Ping Flood (ICMP Attack)
+```
+sudo iptables -A INPUT -p icmp --icmp-type echo-request -m limit --limit 1/s -j ACCEPT
+sudo iptables -A INPUT -p icmp --icmp-type echo-request -j DROP
+```
+- Purpose: Limits the reate of ICMP echo requests (ping) to prevent Denial-of-Service (Dos) attacks.
+- Why? Prevents attackers from overloading the network with excessive ping requests
+
+2.7 Block Invalid Packets 
+```
+sudo iptables -A INPUT -m state --state INVALID -j DROP
+```
+- Reasoning: Block packets that are considered invalid, reducing the attack surface.
+
+3.8 Log All Blocked Connections
+```
+sudo iptables -A INPUT -j LOG --log-prefix "BLOCKED_TRAFFIC: " --log-level 4
+```
+
+3. Conclusion 
+This firewall setup guarantees that only essential services are reachable while preventing unauthorized access. It also offers safeguards against prevalent attacks such as SYN flood and ICMP flood. The logging system aids in efficiently tracking security incidents. 
+
+
+
