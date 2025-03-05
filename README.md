@@ -645,7 +645,7 @@ sudo iptables -A INPUT -m state --state INVALID -j DROP
 ```
 - Reasoning: Block packets that are considered invalid, reducing the attack surface.
 
-3.8 Log All Blocked Connections
+2.8 Log All Blocked Connections
 ```
 sudo iptables -A INPUT -j LOG --log-prefix "BLOCKED_TRAFFIC: " --log-level 4
 ```
